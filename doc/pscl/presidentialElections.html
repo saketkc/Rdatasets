@@ -58,7 +58,7 @@ from 1964 onward; Alabama has missing data for 1948 and
 
 <pre>
 data(presidentialElections)
-xyplot(demVote ~ year | state,
+lattice::xyplot(demVote ~ year | state,
        panel=panel.lines,
        ylab="Democratic Vote for President (percent)",
        xlab="Year",

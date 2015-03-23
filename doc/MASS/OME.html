@@ -188,21 +188,23 @@ OMEf$Resp &lt;- with(OME, rep(rep(c(1,0), length(Trials)),
                           t(cbind(Correct, Trials-Correct))))
 OMEf &lt;- OMEf[, -match(c("Correct", "Trials"), names(OMEf))]
 
-## Not run: ## these fail in R on most platforms
+## Not run: ## this fails in R on some platforms
 fp2 &lt;- deriv(~ 0.5 + 0.5/(1 + exp(-(x-L75)/exp(lsc))),
              c("L75", "lsc"),
              function(x, L75, lsc) NULL)
-try(summary(nlme(Resp ~ fp2(Loud, L75, lsc),
+G1.nlme &lt;- nlme(Resp ~ fp2(Loud, L75, lsc),
      fixed = list(L75 ~ Age, lsc ~ 1),
      random = L75 + lsc ~ 1 | UID,
      data = OMEf[OMEf$Noise == "coherent",], method = "ML",
-     start = list(fixed=c(L75=c(48.7, -0.03), lsc=0.24)), verbose = TRUE)))
+     start = list(fixed=c(L75=c(48.7, -0.03), lsc=0.24)), verbose = TRUE)
+summary(G1.nlme)
 
-try(summary(nlme(Resp ~ fp2(Loud, L75, lsc),
+G2.nlme &lt;- nlme(Resp ~ fp2(Loud, L75, lsc),
      fixed = list(L75 ~ Age, lsc ~ 1),
      random = L75 + lsc ~ 1 | UID,
-     data = OMEf[OMEf$Noise == "incoherent",], method = "ML",
-     start = list(fixed=c(L75=c(41.5, -0.1), lsc=0)), verbose = TRUE)))
+     data = OMEf[OMEf$Noise == "incoherent",], method="ML",
+     start = list(fixed=c(L75=c(41.5, -0.1), lsc=0)), verbose = TRUE)
+summary(G2.nlme)
 
 ## End(Not run)</pre>
 

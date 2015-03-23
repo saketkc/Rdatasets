@@ -87,7 +87,7 @@ Political opinion polls in Australia, 2004-07
 
 <pre>
 data(AustralianElectionPolling)
-xyplot(ALP ~ startDate | org, 
+lattice::xyplot(ALP ~ startDate | org, 
        data=AustralianElectionPolling,
        layout=c(1,5),
        type="b",
@@ -95,11 +95,10 @@ xyplot(ALP ~ startDate | org,
        ylab="ALP")
 
 ## test for house effects
-library(gam)
 y &lt;- AustralianElectionPolling$ALP/100
 v &lt;- y*(1-y)/AustralianElectionPolling$sampleSize
 w &lt;- 1/v
-m1 &lt;- gam(y ~ lo(startDate,span=1/10),
+m1 &lt;- mgcv::gam(y ~ s(as.numeric(startDate)),
           weight=w,	      
           data=AustralianElectionPolling)
 m2 &lt;- update(m1, ~ . + org)
